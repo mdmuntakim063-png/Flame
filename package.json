@@ -1,8 +1,0 @@
-{
-  "name": "trikstr-portfolio",
-  "version": "1.0.0",
-  "description": "Trikstr Network Portfolio with Customizer Admin Dashboard",
-  "scripts": {
-    "start": "npx serve ."
-  }
-}
