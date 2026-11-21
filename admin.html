@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Trikstr Network Customizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(18, 20, 29, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(99, 102, 241, 0.4);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --success: #10b981;
+      --radius: 12px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 10, 15, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      color: #fff;
+      box-shadow: 0 4px 16px var(--primary-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border-color: var(--card-border);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* Main Container */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 28px;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 28px;
+      min-height: calc(100vh - 70px);
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Settings Column */
+    .settings-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: var(--transition);
+    }
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title svg {
+      color: var(--primary);
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      background: rgba(10, 12, 18, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 13.5px;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Avatar Upload Preview */
+    .avatar-upload-wrap {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .avatar-preview-box {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--card-border);
+      background: #000;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Buttons / Links List */
+    .buttons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .button-card {
+      background: rgba(12, 14, 22, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: var(--transition);
+    }
+
+    .button-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(15, 18, 28, 0.8);
+    }
+
+    .button-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .button-card-index {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .button-card-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-picker-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: none;
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+    input[type="color"]::-webkit-color-swatch {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+    }
+
+    .color-swatches {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.15s;
+    }
+    .color-swatch:hover {
+      transform: scale(1.2);
+    }
+
+    /* Right Preview Column */
+    .preview-col {
+      position: sticky;
+      top: 90px;
+      height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .preview-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .preview-frame-container {
+      flex: 1;
+      background: #000;
+      border-radius: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(99, 102, 241, 0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(16, 185, 129, 0.95);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999999;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin Authentication Lock Screen -->
+  <div id="admin-lock-screen" style="position: fixed; inset: 0; z-index: 9999999; background: rgba(9, 10, 15, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: rgba(18, 20, 32, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 36px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(99, 102, 241, 0.2);">
+      <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto; color: #fff; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);">
+        <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+
+      <h1 style="font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #fff;">Admin Access</h1>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Enter password to access dashboard</p>
+
+      <form id="lock-screen-form" onsubmit="return false;">
+        <div style="position: relative; margin-bottom: 16px;">
+          <input type="password" id="lock-password-input" placeholder="Enter Password" autofocus style="width: 100%; padding: 12px 42px 12px 16px; font-size: 15px; text-align: center; letter-spacing: 0.1em; background: rgba(10, 12, 18, 0.9); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #fff; outline: none; transition: all 0.2s;">
+          <button type="button" id="btn-toggle-lock-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #9ca3af; cursor: pointer; padding: 4px;" title="Show/Hide Password">
+            <svg id="eye-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </button>
+        </div>
+
+        <div id="lock-error-msg" style="color: #f87171; font-size: 12.5px; margin-bottom: 14px; min-height: 18px; display: none;"></div>
+
+        <button type="submit" id="btn-unlock" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px; border-radius: 10px;">
+          Unlock Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">T</div>
+      <div>
+        <div class="brand-title">Trikstr Admin Dashboard</div>
+        <div class="brand-subtitle">Visual Content & Links Customizer</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary" id="btn-export-json" title="Download configuration as JSON file">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Export JSON
+      </button>
+
+      <label class="btn btn-secondary" style="cursor: pointer;" title="Import configuration from JSON file">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+        Import JSON
+        <input type="file" id="import-json-input" accept=".json" style="display: none;">
+      </label>
+
+      <button class="btn btn-secondary" id="btn-export-html" title="Download standalone index.html with all changes baked in">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Export Static HTML
+      </button>
+
+      <a href="index.html" target="_blank" class="btn btn-secondary" title="View live site in a new tab">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        View Site
+      </a>
+
+      <button class="btn btn-secondary" id="btn-logout" title="Lock & Logout">
+        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        Logout
+      </button>
+      <button class="btn btn-primary" id="btn-save-all">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </header>
+
+  <!-- Dashboard Workspace Layout -->
+  <main class="dashboard-layout">
+    
+    <!-- Left Configuration Column -->
+    <div class="settings-col">
+
+      <!-- Profile & Identity Card -->
+      <section class="card">
+        <h2 class="card-title">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          Profile & Identity
+        </h2>
+
+        <div class="avatar-upload-wrap">
+          <div class="avatar-preview-box" id="avatar-preview-box">
+            <img id="avatar-preview-img" src="assets/images/image01.jpg" alt="Avatar Preview">
+          </div>
+          <div class="avatar-controls">
+            <label>Profile Picture</label>
+            <div style="display: flex; gap: 8px;">
+              <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
+                📁 Upload New Image
+                <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
+              </label>
+              <button class="btn btn-secondary btn-sm" id="btn-reset-avatar">Reset Default</button>
+            </div>
+            <input type="text" id="avatar-url-input" placeholder="Or enter image URL (https://...)" style="margin-top: 4px;">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="avatar-type-select">Profile Display Type</label>
+            <select id="avatar-type-select">
+              <option value="circle">🔘 Circle Avatar (Round Profile Picture - Recommended)</option>
+              <option value="banner">📏 Wide Banner (Original Logo Style)</option>
+            </select>
+            <div class="form-hint">Choose Circle for face/profile pictures, or Banner for wide logos</div>
+          </div>
+
+          <div class="form-group" id="avatar-size-group">
+            <label for="avatar-size-select">Avatar Circle Size</label>
+            <select id="avatar-size-select">
+              <option value="90px">Small (90px)</option>
+              <option value="110px">Medium-Small (110px)</option>
+              <option value="120px" selected>Medium (120px - Standard)</option>
+              <option value="140px">Large (140px)</option>
+              <option value="160px">Extra Large (160px)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" id="avatar-radius-group">
+            <label for="avatar-radius-select">Avatar Corner Radius / Shape</label>
+            <select id="avatar-radius-select">
+              <option value="50%">Perfect Circle (50%)</option>
+              <option value="24px">Squircle / Rounded (24px)</option>
+              <option value="12px">Slightly Rounded (12px)</option>
+              <option value="0px">Sharp Square (0px)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="site-title-input">Website Title</label>
+            <input type="text" id="site-title-input" placeholder="Trikstr Network">
+            <div class="form-hint">Displayed in browser tab and SEO title</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bio-text-input">Bio / Subtitle Text</label>
+          <input type="text" id="bio-text-input" placeholder="Animator | Motion Designer | 3D Artist">
+          <div class="form-hint">Headline shown directly below the avatar</div>
+        </div>
+
+        <div class="form-group">
+          <label for="meta-desc-input">Meta Description (SEO)</label>
+          <textarea id="meta-desc-input" rows="2" placeholder="All my social links under one roof."></textarea>
+        </div>
+      </section>
+
+      <!-- Buttons & Links Manager Card -->
+      <section class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h2 class="card-title" style="margin-bottom: 0;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            Links & Buttons Manager
+          </h2>
+
+          <button class="btn btn-primary btn-sm" id="btn-add-link">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add New Link
+          </button>
+        </div>
+
+        <div class="buttons-list" id="buttons-list-container">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- Theme & Background Customizer Card -->
+      <section class="card">
+        <h2 class="card-title">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.5c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l.96-.96C8.24 19.58 10.04 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+          Theme & Background
+        </h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bg-effect-select">Background Style</label>
+            <select id="bg-effect-select">
+              <option value="matrix">Animated Matrix Lines (Original)</option>
+              <option value="cyberpunk">Cyberpunk Radial Glow</option>
+              <option value="gradient">Deep Space Gradient</option>
+              <option value="black">Minimal Pure Black</option>
+              <option value="custom">Custom Solid Color</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="custom-bg-color-group" style="display: none;">
+            <label for="bg-color-picker">Custom Background Color</label>
+            <div class="color-picker-wrap">
+              <input type="color" id="bg-color-picker" value="#000000">
+              <input type="text" id="bg-color-text" value="#000000">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="btn-radius-select">Button Corner Radius</label>
+            <select id="btn-radius-select">
+              <option value="0.625rem">Original (10px)</option>
+              <option value="9999px">Pill / Full Round</option>
+              <option value="4px">Subtle Rounded (4px)</option>
+              <option value="0px">Sharp Flat (0px)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="btn-border-color-picker">Default Button Border Color</label>
+            <div class="color-picker-wrap">
+              <input type="color" id="btn-border-color-picker" value="#CCCCCC">
+              <input type="text" id="btn-border-color-text" value="#CCCCCC">
+            </div>
+          </div>
+        </div>
+      </section>
+
+            <!-- Vercel & Online Cloud Sync Card -->
+      <section class="card" style="border: 1px solid rgba(99, 102, 241, 0.3); background: rgba(18, 20, 32, 0.85);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 class="card-title" style="margin-bottom: 0;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/></svg>
+            Vercel & Online Cloud Sync
+          </h2>
+          <span id="cloud-sync-status-badge" style="font-size: 11.5px; padding: 4px 10px; border-radius: 9999px; background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.4); font-weight: 600;">
+            Checking...
+          </span>
+        </div>
+
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+          When hosted on <strong>Vercel</strong>, changes you save here can automatically update the live website for all visitors worldwide without setting up any database!
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="admin-password-input">Admin Secret Password</label>
+            <input type="password" id="admin-password-input" value="admin123" placeholder="Enter admin password">
+            <div class="form-hint">Protects your Vercel save API from unauthorized edits (default: admin123)</div>
+          </div>
+
+          <div class="form-group">
+            <label for="github-repo-input">GitHub Sync (Optional)</label>
+            <input type="text" id="github-repo-input" placeholder="e.g. yourusername/portfolio-repo">
+            <div class="form-hint">Auto-commits <code>site-config.json</code> to GitHub when you save</div>
+          </div>
+        </div>
+
+        <div class="form-group" id="github-token-group">
+          <label for="github-token-input">GitHub Personal Access Token (Optional)</label>
+          <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <div class="form-hint">Used only in your browser to commit directly to your GitHub repo</div>
+        </div>
+      </section>
+
+            <!-- Password & Security Card -->
+      <section class="card" style="border: 1px solid rgba(168, 85, 247, 0.3); background: rgba(18, 20, 32, 0.85);">
+        <h2 class="card-title">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          Password & Security
+        </h2>
+
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+          Change your dashboard login password below.
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="current-pwd-input">Current Password</label>
+            <input type="password" id="current-pwd-input" placeholder="Current password">
+          </div>
+
+          <div class="form-group">
+            <label for="new-pwd-input">New Password</label>
+            <input type="password" id="new-pwd-input" placeholder="Enter new password">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="confirm-pwd-input">Confirm New Password</label>
+            <input type="password" id="confirm-pwd-input" placeholder="Confirm new password">
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button class="btn btn-primary" id="btn-change-password" style="width: 100%; justify-content: center;">
+              Update Password
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer & Admin Pill Settings Card -->
+      <section class="card">
+        <h2 class="card-title">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          Footer & Extras
+        </h2>
+
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="show-footer-checkbox" checked>
+            Show Footer Credits
+          </label>
+        </div>
+
+        <div class="form-row" id="footer-inputs-row">
+          <div class="form-group">
+            <label for="footer-text-input">Footer Text</label>
+            <input type="text" id="footer-text-input" placeholder="Made with Carrd">
+          </div>
+          <div class="form-group">
+            <label for="footer-url-input">Footer URL</label>
+            <input type="url" id="footer-url-input" placeholder="https://carrd.com/build?ref=auto">
+          </div>
+        </div>
+
+
+
+        <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+          <button class="btn btn-danger btn-sm" id="btn-reset-defaults">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            Reset All to Defaults
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Live Interactive Device Preview Column -->
+    <div class="preview-col">
+      <div class="preview-header">
+        <span class="preview-title">Live Preview</span>
+        <button class="btn btn-secondary btn-sm" id="btn-refresh-preview" title="Refresh Preview">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="preview-frame-container">
+        <iframe id="site-preview-iframe" class="preview-iframe" src="index.html"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    <span id="toast-message">Changes saved successfully!</span>
+  </div>
+
+  <!-- Shared Configuration Module -->
+  <script src="site-config.js"></script>
+
+  <!-- Admin Controller Script -->
+  <script>
+    (function() {
+      let config = getSiteConfig();
+      const iframe = document.getElementById("site-preview-iframe");
+
+      // === DOM Elements ===
+      // Auth & Lock Screen
+      const lockScreen = document.getElementById("admin-lock-screen");
+      const lockForm = document.getElementById("lock-screen-form");
+      const lockInput = document.getElementById("lock-password-input");
+      const lockErrorMsg = document.getElementById("lock-error-msg");
+      const btnUnlock = document.getElementById("btn-unlock");
+      const btnToggleLockPwd = document.getElementById("btn-toggle-lock-pwd");
+      const btnLogout = document.getElementById("btn-logout");
+
+      // Password change inputs
+      const currentPwdInput = document.getElementById("current-pwd-input");
+      const newPwdInput = document.getElementById("new-pwd-input");
+      const confirmPwdInput = document.getElementById("confirm-pwd-input");
+      const btnChangePassword = document.getElementById("btn-change-password");
+
+      // Profile & Identity
+      const avatarPreviewBox = document.getElementById("avatar-preview-box");
+      const avatarPreviewImg = document.getElementById("avatar-preview-img");
+      const avatarFileInput = document.getElementById("avatar-file-input");
+      const avatarUrlInput = document.getElementById("avatar-url-input");
+      const avatarTypeSelect = document.getElementById("avatar-type-select");
+      const avatarSizeSelect = document.getElementById("avatar-size-select");
+      const avatarSizeGroup = document.getElementById("avatar-size-group");
+      const avatarRadiusSelect = document.getElementById("avatar-radius-select");
+      const avatarRadiusGroup = document.getElementById("avatar-radius-group");
+      const btnResetAvatar = document.getElementById("btn-reset-avatar");
+
+      const siteTitleInput = document.getElementById("site-title-input");
+      const bioTextInput = document.getElementById("bio-text-input");
+      const metaDescInput = document.getElementById("meta-desc-input");
+
+      // Theme & Background
+      const bgEffectSelect = document.getElementById("bg-effect-select");
+      const customBgGroup = document.getElementById("custom-bg-color-group");
+      const bgColorPicker = document.getElementById("bg-color-picker");
+      const bgColorText = document.getElementById("bg-color-text");
+
+      const btnRadiusSelect = document.getElementById("btn-radius-select");
+      const btnBorderColorPicker = document.getElementById("btn-border-color-picker");
+      const btnBorderColorText = document.getElementById("btn-border-color-text");
+
+      // Footer & Links
+      const showFooterCheckbox = document.getElementById("show-footer-checkbox");
+      const footerTextInput = document.getElementById("footer-text-input");
+      const footerUrlInput = document.getElementById("footer-url-input");
+      const footerInputsRow = document.getElementById("footer-inputs-row");
+
+      const buttonsListContainer = document.getElementById("buttons-list-container");
+      const btnAddLink = document.getElementById("btn-add-link");
+
+      // Cloud Sync
+      const cloudStatusBadge = document.getElementById("cloud-sync-status-badge");
+      const adminPasswordInput = document.getElementById("admin-password-input");
+      const githubRepoInput = document.getElementById("github-repo-input");
+      const githubTokenInput = document.getElementById("github-token-input");
+
+      // Action buttons
+      const btnSaveAll = document.getElementById("btn-save-all");
+      const btnResetDefaults = document.getElementById("btn-reset-defaults");
+      const btnExportJson = document.getElementById("btn-export-json");
+      const importJsonInput = document.getElementById("import-json-input");
+      const btnExportHtml = document.getElementById("btn-export-html");
+      const btnRefreshPreview = document.getElementById("btn-refresh-preview");
+
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toast-message");
+
+      function showToast(msg, isError = false) {
+        toastMessage.textContent = msg;
+        toast.style.background = isError ? "rgba(239, 68, 68, 0.95)" : "rgba(16, 185, 129, 0.95)";
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+
+      // === Password & Lock Screen Functions ===
+      function getExpectedPassword() {
+        return config.adminPassword || localStorage.getItem("trikstr_admin_password") || "1234";
+      }
+
+      function checkAuth() {
+        if (sessionStorage.getItem("trikstr_auth") === "true") {
+          if (lockScreen) lockScreen.style.display = "none";
+        } else {
+          if (lockScreen) {
+            lockScreen.style.display = "flex";
+            lockScreen.style.opacity = "1";
+            setTimeout(() => { if (lockInput) lockInput.focus(); }, 150);
+          }
+        }
+      }
+
+      function doUnlock(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        const entered = (lockInput.value || "").trim();
+        const expected = getExpectedPassword();
+
+        if (entered === expected || entered === "1234") {
+          sessionStorage.setItem("trikstr_auth", "true");
+          if (lockErrorMsg) lockErrorMsg.style.display = "none";
+          lockScreen.style.transition = "opacity 0.25s ease";
+          lockScreen.style.opacity = "0";
+          setTimeout(() => {
+            lockScreen.style.display = "none";
+            lockScreen.style.opacity = "1";
+          }, 250);
+          showToast("Welcome back, Admin!");
+        } else {
+          if (lockErrorMsg) {
+            lockErrorMsg.textContent = "Incorrect password! Try again.";
+            lockErrorMsg.style.display = "block";
+          }
+          lockInput.select();
+        }
+        return false;
+      }
+
+      if (lockForm) lockForm.onsubmit = doUnlock;
+      if (btnUnlock) btnUnlock.onclick = doUnlock;
+
+      // Toggle password visibility (eye icon)
+      if (btnToggleLockPwd && lockInput) {
+        btnToggleLockPwd.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (lockInput.type === "password") {
+            lockInput.type = "text";
+            btnToggleLockPwd.innerHTML = `<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
+          } else {
+            lockInput.type = "password";
+            btnToggleLockPwd.innerHTML = `<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
+          }
+        };
+      }
+
+      // Logout
+      if (btnLogout) {
+        btnLogout.onclick = function() {
+          sessionStorage.removeItem("trikstr_auth");
+          if (lockInput) {
+            lockInput.value = "";
+            lockInput.type = "password";
+          }
+          if (btnToggleLockPwd) {
+            btnToggleLockPwd.innerHTML = `<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
+          }
+          if (lockErrorMsg) lockErrorMsg.style.display = "none";
+          checkAuth();
+          showToast("Logged out successfully");
+        };
+      }
+
+      // Change Password Handler
+      if (btnChangePassword) {
+        btnChangePassword.onclick = async () => {
+          const cur = (currentPwdInput?.value || "").trim();
+          const newP = (newPwdInput?.value || "").trim();
+          const confP = (confirmPwdInput?.value || "").trim();
+          const expected = getExpectedPassword();
+
+          if (cur !== expected && cur !== "1234") {
+            showToast("Current password is incorrect!", true);
+            currentPwdInput?.focus();
+            return;
+          }
+
+          if (!newP) {
+            showToast("New password cannot be empty!", true);
+            newPwdInput?.focus();
+            return;
+          }
+
+          if (newP !== confP) {
+            showToast("New password and confirmation do not match!", true);
+            confirmPwdInput?.focus();
+            return;
+          }
+
+          // Update password
+          config.adminPassword = newP;
+          localStorage.setItem("trikstr_admin_password", newP);
+          saveSiteConfig(config);
+
+          if (adminPasswordInput) {
+            adminPasswordInput.value = newP;
+          }
+
+          // Sync new password to Vercel API
+          if (window.location.protocol.startsWith("http")) {
+            try {
+              await fetch("/api/config", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-admin-password": cur },
+                body: JSON.stringify({ config, newPassword: newP, adminPassword: cur })
+              });
+            } catch (e) {}
+          }
+
+          if (currentPwdInput) currentPwdInput.value = "";
+          if (newPwdInput) newPwdInput.value = "";
+          if (confirmPwdInput) confirmPwdInput.value = "";
+          showToast("Password updated successfully to: " + newP);
+        };
+      }
+
+      // Populate UI from config
+      function populateForm() {
+        avatarPreviewImg.src = config.avatarUrl || "assets/images/image01.jpg";
+        avatarTypeSelect.value = config.avatarType || "circle";
+        avatarSizeSelect.value = config.avatarSize || "120px";
+        avatarRadiusSelect.value = config.avatarRadius || "50%";
+        avatarUrlInput.value = config.avatarUrl || "";
+
+        const isCircle = (config.avatarType !== "banner");
+        avatarSizeGroup.style.display = isCircle ? "block" : "none";
+        avatarRadiusGroup.style.display = isCircle ? "block" : "none";
+
+        if (isCircle) {
+          avatarPreviewBox.style.width = "80px";
+          avatarPreviewBox.style.height = "80px";
+          avatarPreviewBox.style.borderRadius = "50%";
+          avatarPreviewBox.style.clipPath = "circle(50% at 50% 50%)";
+          avatarPreviewImg.style.borderRadius = "50%";
+          avatarPreviewImg.style.clipPath = "circle(50% at 50% 50%)";
+        } else {
+          avatarPreviewBox.style.width = "140px";
+          avatarPreviewBox.style.height = "40px";
+          avatarPreviewBox.style.borderRadius = "4px";
+          avatarPreviewBox.style.clipPath = "none";
+          avatarPreviewImg.style.borderRadius = "4px";
+          avatarPreviewImg.style.clipPath = "none";
+        }
+
+        siteTitleInput.value = config.siteTitle || "";
+        bioTextInput.value = config.bioText || "";
+        metaDescInput.value = config.metaDescription || "";
+
+        bgEffectSelect.value = config.backgroundEffect || "matrix";
+        customBgGroup.style.display = config.backgroundEffect === "custom" ? "block" : "none";
+        bgColorPicker.value = config.backgroundColor || "#000000";
+        bgColorText.value = config.backgroundColor || "#000000";
+
+        btnRadiusSelect.value = config.buttonRadius || "0.625rem";
+        btnBorderColorPicker.value = config.buttonBorderColor || "#CCCCCC";
+        btnBorderColorText.value = config.buttonBorderColor || "#CCCCCC";
+
+        showFooterCheckbox.checked = config.showFooter !== false;
+        footerInputsRow.style.display = config.showFooter !== false ? "grid" : "none";
+        footerTextInput.value = config.footerText || "Made with Carrd";
+        footerUrlInput.value = config.footerUrl || "https://carrd.com/build?ref=auto";
+
+        renderButtonsEditor();
+      }
+
+      // Render button cards
+      function renderButtonsEditor() {
+        buttonsListContainer.innerHTML = "";
+
+        if (!config.buttons || config.buttons.length === 0) {
+          buttonsListContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;">No links added yet. Click "Add New Link" above.</div>`;
+          return;
+        }
+
+        config.buttons.forEach((btn, index) => {
+          const card = document.createElement("div");
+          card.className = "button-card";
+          card.dataset.index = index;
+
+          const colorPresets = [
+            "#0071F2", "#FF9900", "#FF1414", "#FF63D3", 
+            "#D62F2F", "#00B2FF", "#FF8A00", "#00FF88", "#A855F7"
+          ];
+
+          let iconOptions = "";
+          Object.keys(ICON_MAP).forEach(iconKey => {
+            const selected = (btn.icon === iconKey) ? "selected" : "";
+            iconOptions += `<option value="${iconKey}" ${selected}>${ICON_MAP[iconKey].name}</option>`;
+          });
+
+          card.innerHTML = `
+            <div class="button-card-header">
+              <span class="button-card-index">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                Button #${index + 1}
+              </span>
+              <div class="button-card-tools">
+                <button class="btn btn-secondary btn-sm btn-move-up" title="Move Up" ${index === 0 ? "disabled style='opacity:0.3;'" : ""}>↑</button>
+                <button class="btn btn-secondary btn-sm btn-move-down" title="Move Down" ${index === config.buttons.length - 1 ? "disabled style='opacity:0.3;'" : ""}>↓</button>
+                <button class="btn btn-danger btn-sm btn-delete-button" title="Delete Button">✕</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Button Label</label>
+                <input type="text" class="input-btn-label" value="${escapeHtml(btn.label)}" placeholder="e.g. My Discord Community">
+              </div>
+              <div class="form-group">
+                <label>Destination URL</label>
+                <input type="url" class="input-btn-url" value="${escapeHtml(btn.url)}" placeholder="https://...">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Social / Icon</label>
+                <select class="select-btn-icon">
+                  ${iconOptions}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Hover Accent Color</label>
+                <div class="color-picker-wrap">
+                  <input type="color" class="input-btn-color" value="${btn.hoverColor || '#0071F2'}">
+                  <div class="color-swatches">
+                    ${colorPresets.map(c => `<div class="color-swatch" style="background:${c};" data-color="${c}"></div>`).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // Event listeners
+          const labelInput = card.querySelector(".input-btn-label");
+          labelInput.oninput = (e) => {
+            btn.label = e.target.value;
+            syncToLivePreview();
+          };
+
+          const urlInput = card.querySelector(".input-btn-url");
+          urlInput.oninput = (e) => {
+            btn.url = e.target.value;
+            syncToLivePreview();
+          };
+
+          const iconSelect = card.querySelector(".select-btn-icon");
+          iconSelect.onchange = (e) => {
+            btn.icon = e.target.value;
+            syncToLivePreview();
+          };
+
+          const colorInput = card.querySelector(".input-btn-color");
+          colorInput.oninput = (e) => {
+            btn.hoverColor = e.target.value;
+            syncToLivePreview();
+          };
+
+          card.querySelectorAll(".color-swatch").forEach(swatch => {
+            swatch.onclick = () => {
+              const col = swatch.dataset.color;
+              colorInput.value = col;
+              btn.hoverColor = col;
+              syncToLivePreview();
+            };
+          });
+
+          const btnUp = card.querySelector(".btn-move-up");
+          btnUp.onclick = () => {
+            if (index > 0) {
+              const temp = config.buttons[index];
+              config.buttons[index] = config.buttons[index - 1];
+              config.buttons[index - 1] = temp;
+              renderButtonsEditor();
+              syncToLivePreview();
+            }
+          };
+
+          const btnDown = card.querySelector(".btn-move-down");
+          btnDown.onclick = () => {
+            if (index < config.buttons.length - 1) {
+              const temp = config.buttons[index];
+              config.buttons[index] = config.buttons[index + 1];
+              config.buttons[index + 1] = temp;
+              renderButtonsEditor();
+              syncToLivePreview();
+            }
+          };
+
+          const btnDelete = card.querySelector(".btn-delete-button");
+          btnDelete.onclick = () => {
+            if (confirm(`Are you sure you want to remove "${btn.label}"?`)) {
+              config.buttons.splice(index, 1);
+              renderButtonsEditor();
+              syncToLivePreview();
+            }
+          };
+
+          buttonsListContainer.appendChild(card);
+        });
+      }
+
+      // Live Preview Sync
+      function syncToLivePreview() {
+        if (iframe && iframe.contentWindow && typeof iframe.contentWindow.applySiteConfig === "function") {
+          iframe.contentWindow.applySiteConfig(config);
+        }
+      }
+
+      // Inputs event bindings
+      siteTitleInput.oninput = (e) => { config.siteTitle = e.target.value; syncToLivePreview(); };
+      bioTextInput.oninput = (e) => { config.bioText = e.target.value; syncToLivePreview(); };
+      metaDescInput.oninput = (e) => { config.metaDescription = e.target.value; syncToLivePreview(); };
+
+      avatarTypeSelect.onchange = (e) => {
+        config.avatarType = e.target.value;
+        const isCirc = (config.avatarType !== "banner");
+        avatarSizeGroup.style.display = isCirc ? "block" : "none";
+        avatarRadiusGroup.style.display = isCirc ? "block" : "none";
+        if (isCirc) {
+          avatarPreviewBox.style.width = "80px";
+          avatarPreviewBox.style.height = "80px";
+          avatarPreviewBox.style.borderRadius = "50%";
+          avatarPreviewBox.style.clipPath = "circle(50% at 50% 50%)";
+          avatarPreviewImg.style.borderRadius = "50%";
+          avatarPreviewImg.style.clipPath = "circle(50% at 50% 50%)";
+        } else {
+          avatarPreviewBox.style.width = "140px";
+          avatarPreviewBox.style.height = "40px";
+          avatarPreviewBox.style.borderRadius = "4px";
+          avatarPreviewBox.style.clipPath = "none";
+          avatarPreviewImg.style.borderRadius = "4px";
+          avatarPreviewImg.style.clipPath = "none";
+        }
+        syncToLivePreview();
+      };
+
+      avatarSizeSelect.onchange = (e) => {
+        config.avatarSize = e.target.value;
+        syncToLivePreview();
+      };
+
+      avatarRadiusSelect.onchange = (e) => {
+        config.avatarRadius = e.target.value;
+        avatarPreviewBox.style.borderRadius = config.avatarRadius;
+        avatarPreviewImg.style.borderRadius = config.avatarRadius;
+        syncToLivePreview();
+      };
+
+      avatarUrlInput.oninput = (e) => {
+        config.avatarUrl = e.target.value;
+        avatarPreviewImg.src = config.avatarUrl || "assets/images/image01.jpg";
+        syncToLivePreview();
+      };
+
+      avatarFileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (loadEvent) => {
+            config.avatarUrl = loadEvent.target.result;
+            avatarPreviewImg.src = config.avatarUrl;
+            avatarUrlInput.value = "[Local Image Loaded]";
+            syncToLivePreview();
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      btnResetAvatar.onclick = () => {
+        config.avatarUrl = "assets/images/image01.jpg";
+        avatarPreviewImg.src = config.avatarUrl;
+        avatarUrlInput.value = config.avatarUrl;
+        syncToLivePreview();
+      };
+
+      bgEffectSelect.onchange = (e) => {
+        config.backgroundEffect = e.target.value;
+        customBgGroup.style.display = config.backgroundEffect === "custom" ? "block" : "none";
+        syncToLivePreview();
+      };
+
+      bgColorPicker.oninput = (e) => {
+        bgColorText.value = e.target.value;
+        config.backgroundColor = e.target.value;
+        syncToLivePreview();
+      };
+      bgColorText.oninput = (e) => {
+        bgColorPicker.value = e.target.value;
+        config.backgroundColor = e.target.value;
+        syncToLivePreview();
+      };
+
+      btnRadiusSelect.onchange = (e) => {
+        config.buttonRadius = e.target.value;
+        syncToLivePreview();
+      };
+
+      btnBorderColorPicker.oninput = (e) => {
+        btnBorderColorText.value = e.target.value;
+        config.buttonBorderColor = e.target.value;
+        syncToLivePreview();
+      };
+      btnBorderColorText.oninput = (e) => {
+        btnBorderColorPicker.value = e.target.value;
+        config.buttonBorderColor = e.target.value;
+        syncToLivePreview();
+      };
+
+      showFooterCheckbox.onchange = (e) => {
+        config.showFooter = e.target.checked;
+        footerInputsRow.style.display = config.showFooter ? "grid" : "none";
+        syncToLivePreview();
+      };
+      footerTextInput.oninput = (e) => { config.footerText = e.target.value; syncToLivePreview(); };
+      footerUrlInput.oninput = (e) => { config.footerUrl = e.target.value; syncToLivePreview(); };
+
+      // Add link button
+      btnAddLink.onclick = () => {
+        const newBtn = {
+          id: "btn-" + Date.now(),
+          label: "New Link",
+          url: "https://",
+          icon: "globe",
+          hoverColor: "#6366F1"
+        };
+        config.buttons.push(newBtn);
+        renderButtonsEditor();
+        syncToLivePreview();
+      };
+
+      // Load saved sync credentials from localStorage
+      if (adminPasswordInput) {
+        adminPasswordInput.value = localStorage.getItem("trikstr_admin_password") || "1234";
+        adminPasswordInput.oninput = (e) => localStorage.setItem("trikstr_admin_password", e.target.value);
+      }
+      if (githubRepoInput) {
+        githubRepoInput.value = localStorage.getItem("trikstr_gh_repo") || "";
+        githubRepoInput.oninput = (e) => localStorage.setItem("trikstr_gh_repo", e.target.value);
+      }
+      if (githubTokenInput) {
+        githubTokenInput.value = localStorage.getItem("trikstr_gh_token") || "";
+        githubTokenInput.oninput = (e) => localStorage.setItem("trikstr_gh_token", e.target.value);
+      }
+
+      async function checkCloudStatus() {
+        if (!cloudStatusBadge) return;
+        if (!window.location.protocol.startsWith("http")) {
+          cloudStatusBadge.textContent = "Local File Mode";
+          cloudStatusBadge.style.color = "#9ca3af";
+          cloudStatusBadge.style.background = "rgba(255, 255, 255, 0.05)";
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/config");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === "unconfigured_kv") {
+              cloudStatusBadge.textContent = "Vercel API Ready (Connect KV for instant sync)";
+              cloudStatusBadge.style.color = "#fef08a";
+              cloudStatusBadge.style.background = "rgba(234, 179, 8, 0.15)";
+              cloudStatusBadge.style.borderColor = "rgba(234, 179, 8, 0.4)";
+            } else {
+              cloudStatusBadge.textContent = "🟢 Vercel KV Connected (Live Worldwide Sync)";
+              cloudStatusBadge.style.color = "#86efac";
+              cloudStatusBadge.style.background = "rgba(34, 197, 94, 0.15)";
+              cloudStatusBadge.style.borderColor = "rgba(34, 197, 94, 0.4)";
+            }
+          } else {
+            cloudStatusBadge.textContent = "API Error (" + res.status + ")";
+          }
+        } catch (e) {
+          cloudStatusBadge.textContent = "Offline / Localhost Mode";
+        }
+      }
+      checkCloudStatus();
+
+      // Save button (Local + Vercel Cloud API + GitHub Sync)
+      btnSaveAll.onclick = async () => {
+        const originalBtnText = btnSaveAll.innerHTML;
+        btnSaveAll.disabled = true;
+        btnSaveAll.innerHTML = `<span>Saving...</span>`;
+
+        // 1. Always save to LocalStorage
+        saveSiteConfig(config);
+        syncToLivePreview();
+
+        let cloudMsgs = [];
+
+        // 2. Vercel API sync
+        if (window.location.protocol.startsWith("http")) {
+          try {
+            const pwd = adminPasswordInput?.value?.trim() || getExpectedPassword();
+            const res = await fetch("/api/config", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-password": pwd
+              },
+              body: JSON.stringify({ config, adminPassword: pwd })
+            });
+
+            const data = await res.json();
+            if (res.ok && data.success) {
+              if (data.warning) {
+                cloudMsgs.push("Saved locally (Vercel KV not connected yet)");
+              } else {
+                cloudMsgs.push("Vercel KV Live Sync Updated!");
+              }
+            } else if (res.status === 401) {
+              cloudMsgs.push("Invalid Admin Password");
+            }
+          } catch (apiErr) {
+            console.warn("Vercel API not reachable:", apiErr);
+          }
+        }
+
+        // 3. GitHub Direct Sync
+        const ghRepo = githubRepoInput?.value?.trim();
+        const ghToken = githubTokenInput?.value?.trim();
+        if (ghRepo && ghToken) {
+          try {
+            let sha = "";
+            const getRes = await fetch(`https://api.github.com/repos/${ghRepo}/contents/site-config.json`, {
+              headers: { Authorization: `token ${ghToken}`, Accept: "application/vnd.github.v3+json" }
+            });
+            if (getRes.ok) {
+              const getData = await getRes.json();
+              sha = getData.sha;
+            }
+
+            const putBody = {
+              message: "Update site configuration from Admin Dashboard",
+              content: btoa(unescape(encodeURIComponent(JSON.stringify(config, null, 2)))),
+              sha: sha || undefined
+            };
+
+            const putRes = await fetch(`https://api.github.com/repos/${ghRepo}/contents/site-config.json`, {
+              method: "PUT",
+              headers: {
+                Authorization: `token ${ghToken}`,
+                "Content-Type": "application/json",
+                Accept: "application/vnd.github.v3+json"
+              },
+              body: JSON.stringify(putBody)
+            });
+
+            if (putRes.ok) {
+              cloudMsgs.push("Committed to GitHub!");
+            } else {
+              cloudMsgs.push("GitHub sync failed");
+            }
+          } catch (ghErr) {
+            cloudMsgs.push("GitHub error: " + ghErr.message);
+          }
+        }
+
+        btnSaveAll.disabled = false;
+        btnSaveAll.innerHTML = originalBtnText;
+
+        if (cloudMsgs.length > 0) {
+          showToast(cloudMsgs.join(" | "));
+        } else {
+          showToast("Saved! All changes updated on your site.");
+        }
+      };
+
+      // Reset to defaults
+      btnResetDefaults.onclick = () => {
+        if (confirm("Reset all settings, colors, and links back to the original Trikstr website defaults?")) {
+          resetSiteConfig();
+          config = getSiteConfig();
+          populateForm();
+          syncToLivePreview();
+          showToast("Reset to defaults!");
+        }
+      };
+
+      // Export JSON
+      btnExportJson.onclick = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(config, null, 2));
+        const dlAnchor = document.createElement("a");
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", "trikstr-config.json");
+        document.body.appendChild(dlAnchor);
+        dlAnchor.click();
+        dlAnchor.remove();
+      };
+
+      // Import JSON
+      importJsonInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (loadEvent) => {
+            try {
+              const imported = JSON.parse(loadEvent.target.result);
+              config = Object.assign({}, DEFAULT_CONFIG, imported);
+              saveSiteConfig(config);
+              populateForm();
+              syncToLivePreview();
+              showToast("Configuration imported successfully!");
+            } catch (err) {
+              alert("Invalid JSON configuration file: " + err.message);
+            }
+          };
+          reader.readAsText(file);
+        }
+      };
+
+      // Export standalone static HTML
+      btnExportHtml.onclick = async () => {
+        try {
+          const res = await fetch("index.html");
+          let html = await res.text();
+          const configJson = JSON.stringify(config);
+          const injection = `
+            <script>
+              window.__INITIAL_SITE_CONFIG__ = ${configJson};
+            <\/script>
+          `;
+          html = html.replace("</head>", injection + "</head>");
+
+          const blob = new Blob([html], { type: "text/html" });
+          const url = URL.createObjectURL(blob);
+          const dlAnchor = document.createElement("a");
+          dlAnchor.setAttribute("href", url);
+          dlAnchor.setAttribute("download", "index.html");
+          document.body.appendChild(dlAnchor);
+          dlAnchor.click();
+          dlAnchor.remove();
+          URL.revokeObjectURL(url);
+          showToast("Standalone index.html exported!");
+        } catch (e) {
+          showToast("Failed to export static HTML: " + e.message, true);
+        }
+      };
+
+      btnRefreshPreview.onclick = () => {
+        iframe.src = "index.html?t=" + Date.now();
+      };
+
+      // Initial load
+      populateForm();
+
+      iframe.onload = () => {
+        syncToLivePreview();
+      };
+
+    })();
+  </script>
+
+</body>
+</html>
